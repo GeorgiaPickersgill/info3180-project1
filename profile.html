@@ -1,0 +1,68 @@
+<!DOCTYPE>
+<html>
+	<head>
+	<title>New Profile </title>
+
+    <link href="/static/css/profile.css" rel="stylesheet">
+
+	</head>
+	<body>
+		<hr>
+		<h1> Complete This Form to Create your Profile</h1>
+		<hr>
+		<form action = "{{ url_for('contact') }}"" method= "POST">
+			{{ form.csrf_token}}
+			<div class="name">
+			<p>First Name</p>
+			{{form.firstname.label}}
+			{{form.firstname(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="name">
+			<p>Last Name</p>
+			{{form.lastname.label}}
+			{{form.lastname(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="age">
+			<p>Age</p>
+			{{form.age.label}}
+			{{form.age(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="biography">
+			<p>Biography</p>
+			{{form.biography.label}}
+			{{form.biography(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="gender">
+			<p>Gender</p>
+			{{form.gender.label}}
+			{{form.gender(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="image">
+			<p>Profile Image</p>
+			{{form.image.label}}
+			{{form.image(size=20)}}
+			<br><br>
+			</div>
+
+			<div class="submit">
+			{{form.submit.label}}
+			{{form.submit(size=20)}}
+			<br><br>
+			</div>
+
+
+
+
+	</body>
+	<script type="text/javascript" src="static/js/profile.js" ></script>
+</html>
