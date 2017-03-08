@@ -1,8 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, TextField, SelectField
-from wtforms.validators import DataRequired, Email
+from wtforms import StringField, SubmitField, TextAreaField, TextField, SelectField, PasswordField
+from wtforms.validators import DataRequired, Email, InputRequired
 from flask_wtf.file import FileField, FileRequired
 from werkzeug.utils import secure_filename
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+
 
 
 class ProfileForm(FlaskForm):
