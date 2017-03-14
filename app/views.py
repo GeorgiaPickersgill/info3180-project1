@@ -4,11 +4,11 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+import uuid
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from flask_login import login_user, logout_user, current_user, login_required
-from forms import LoginForm
+from form import LoginForm
 from models import UserProfile
 from app import app
 from flask import render_template, request, redirect, url_for, flash
@@ -74,45 +74,75 @@ def profileform ():
     if request.method == 'POST':
         if form.validate_on_submit():
             """post method filler"""
-            return render_template('profile.html', form=form)
-        else:
-            flash("Please complete all required fields")
-            return render_template('profile.html', form=form)
-    elif request.method == 'GET':
-        """Render website's profile page."""
-        return render_template('profile.html', form=form, date = timeinfo())
-        
+            username = request.form['username']
+            first_name = request.form['firstname']
+            last_name = request.form['lastname']
+            age = request.form['age']
+            biography = request.form['biography']
+            image = request.form['image']
+            gender = request.form['gender']
+            created_on = timeinfo()
+            userid = uuid.uuid4()
+            
+            if image and allowed_file(image.filename):
+            pic = secure_filename(image.filename)
+            path ="/static/uploads/"+ pic
+            image.save("./app"+path)
+            image =path
+            prof = UserProfiles(1,firstname,lastname,username,gender,age,bio,image,date())
+            db.session.add(prof)
+            db.session.commit()
+            return redirect (url_for('home'))
+    return render_template('profile.html',form=pform)
+    
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
         
 @app.route('/profiles', methods= ['GET','POST'])
 def allprofilesform ():
     form = AllProfilesForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            return render_template('profiles.html', form=form)
-        else:
-            flash('Your email was not submitted. Remember all fields are required.')
-            return render_template('profile.html', form=form)
-    elif request.method == 'GET':
-        """Render website's profile page."""
-        return render_template('profiles.html', form=form)
+    users=[]
+    xl=[]
+    p={}
+    i=0
+    print request.method
+    if request.method=="POST":
+        users= db.session.query(UserProfile).all()
+        for user in users:
+            p={'username':user.username,'userid':str(user.id)}
+            users.insert(i,p)
+            i+=1
+        x={'users':jsonify(users)}
+        xl.insert(0,x)
+        print x
+        # return jsonify(x)
+        return jsonify(users)
+    users   = db.session.query(UserProfile).all()
+    for user in users:
+        users.append((user.firstname, user.username))
+    return render_template('profiles.html',users=users)
         
 
 
 @app.route('/profile/<userid>', methods= ['GET','POST'])
-def personalprofileform ():
+def personalprofileform (userid):
     form = PersonalProfileForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            return render_template('personalprofile.html', form=form)
-        else:
-            flash('Your email was not submitted. Remember all fields are required.')
-            return render_template('personalprofile.html', form=form)
-    elif request.method == 'GET':
-        """Render website's profile page."""
-        return render_template('personalprofile.html', form=form)
+    user={}
+    i=0
+    if request.method=='POST':
+        users= db.session.query(UserProfile).filter_by(username=userid)
+        for user in users:
+            p={'userid':str(user.id),'username':user.username, 'image':user.profpic,'gender':user.gender,'age':str(user.age),'profile_created_on':user.date_created}
+            # user.insert(i,p)
+            i+=1
+        return jsonify(p)
+    users= db.session.query(UserProfile).filter_by(username=userid)
+    return render_template('viewprof.html',users=users)
         
 def timeinfo():
-	date = time.strftime("%a, %d %b %Y")
+	date = time.strftime("%d %b %Y")
 
 	return date
 	

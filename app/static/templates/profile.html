@@ -5,9 +5,9 @@
 		<hr>
 		<h1> Complete This Form to Create your Profile</h1>
 		<hr>
-		<form action = "{{ url_for('contact') }}"" method= "POST">
+		<form action = "{{ url_for('profile') }}" method= "POST">
 			{{ form.csrf_token}}
-			<div class="name" id="name>
+			<div class="name" id="name">
 			<p>First Name</p>
 			{{form.firstname.label}}
 			{{form.firstname(size=20)}}
@@ -18,6 +18,13 @@
 			<p>Last Name</p>
 			{{form.lastname.label}}
 			{{form.lastname(size=20)}}
+			<br><br>
+			</div>
+			
+			<div class="name" id="name">
+			<p>Username</p>
+			{{form.username.label}}
+			{{form.username(size=20)}}
 			<br><br>
 			</div>
 

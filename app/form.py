@@ -12,6 +12,7 @@ class LoginForm(FlaskForm):
 
 class ProfileForm(FlaskForm):
 	csrf = True
+	username = StringField('Username', validators=[InputRequired()])
 	firstname = TextField('Firstname', validators= [DataRequired("Please enter your first name")])
 	lastname = TextField('Lastname', validators= [DataRequired("Please enter your last name")])
 	age = TextField('age', validators= [DataRequired("Please enter your age")])
@@ -19,3 +20,12 @@ class ProfileForm(FlaskForm):
 	image = FileField('image',validators=[FileRequired()])
 	gender = SelectField(u'Gender', choices=[('M', 'Male'), ('F', 'Female')])
 	submit = SubmitField(" Submit profile details ")
+
+class AllProfilesForm(FlaskForm):
+	crf = True
+	
+
+
+class PersonalProfileForm(FlaskForm):
+	csrf = True
+	

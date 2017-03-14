@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% block main%}
+    {% for user in users %}
+    <h1>{{ user.firstname }}'s Profile</h1>
+    <img src="{{user.image}}"></img>
+    <h2>{{ user.firstname }} {{user.lastname}}</h2> 
+    <h6>Date Created: {{user.created_on}}</h6>
+    <p>Username: {{user.username}}<br>
+    UserID: {{user.id}}<br>
+    Gender: {{user.gender}}<br>
+    Age: {{user.age}}<br><br>
+    {{user.bio}}
+    </p> 
+    {% endfor %}
+    {% endblock%}
+  

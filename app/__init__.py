@@ -3,8 +3,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "Alessia"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://lab5:Alessia@localhost/lab5"
+app.config['SECRET_KEY'] = "simplepassword#1"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://profile_admin:simplepassword#1@localhost/Profiles"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # added just to suppress a warning
 
 db = SQLAlchemy(app)
@@ -16,3 +16,4 @@ login_manager.login_view = "login"
 
 app.config.from_object(__name__)
 from app import views
+

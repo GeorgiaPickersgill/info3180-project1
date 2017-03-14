@@ -1,56 +1,10 @@
-{% extends "base.html" %}
-
-{% block main %}
-	<body>
-		<hr>
-		<h1> All Profiles</h1>
-		<hr>
-		<form action = "{{ url_for('contact') }}"" method= "GET">
-			{{ form.csrf_token}}
-			<div class="name" id="name>
-			<p>First Name</p>
-			{{form.firstname.label}}
-			{{form.firstname(size=20)}}
-			<br><br>
-			</div>
-
-			<div class="name" id="name">
-			<p>Last Name</p>
-			{{form.lastname.label}}
-			{{form.lastname(size=20)}}
-			<br><br>
-			</div>
-
-			<div class="age" id="age">
-			<p>Age</p>
-			{{form.age.label}}
-			{{form.age(size=20)}}
-			<br><br>
-			</div>
-
-			<div class="biography" id="biography" >
-			<p>Biography</p>
-			{{form.biography.label}}
-			{{form.biography(size=20)}}
-			<br><br>
-			</div>
-
-			<div class="gender" id="gender">
-			<p>Gender</p>
-			{{form.gender.label}}
-			{{form.gender(size=20)}}
-			<br><br>
-			</div>
-
-			<div class="image" id="image">
-			<p>Profile Image</p>
-			{{form.image.label}}
-			{{form.image(size=20)}}
-			<br><br>
-			</div>
-
-	</body>
-	<script type="text/javascript" src="static/js/profile.js" ></script>
-</html>
-
-{% endblock %}
+{% extends "base.html"%}
+{% block main%}
+<h1>ALL USERS</h1>
+<ul>
+    {% for user in users %}
+    <li><a href="/profile/{{user.username}}"> {{ user.firstname }} {{user.lastname}}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock%}

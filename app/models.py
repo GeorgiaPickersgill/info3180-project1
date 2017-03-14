@@ -1,15 +1,15 @@
 from . import db
 
 class UserProfile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
     username = db.Column(db.String(80), unique=True)
     age = db.Column(db.String(80), unique=True)
     biography = db.Column(db.String(300), unique=True)
     image = db.Column(db.String(80), unique=True)
-    gender = db.Column(db.String(80), unique=True)
-    created_on = db.Column(db.String(80), unique=True)
+    gender = db.Column(db.String(80))
+    created_on = db.Column(db.DateTime(80), unique=True)
 
     def is_authenticated(self):
         return True
@@ -28,3 +28,15 @@ class UserProfile(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.username)
+        
+        
+    def __init__(self, userid, first_name, last_name, username, age, biography, image, gender, created_on):
+        self.userid = userid
+        self.first_name = first_name
+        self.last_name = last_name
+        self.username = username
+        self.age = age
+        self.biography = biography
+        self.image = image
+        self.gender = gender
+        self.created_on = created_on
