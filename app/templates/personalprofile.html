@@ -8,17 +8,17 @@
 {% block main%}
 <h1 class="page-header">User Profile</h1>
 {% include 'flash_messages.html' %}
-<div class="main-container">
+<div id="main-container">
     <div>
-        <img id = "pic" src = "/static/uploads/{{ user['image'] }}"/> 
+        <img class = "pic" src = "/static/uploads/{{ user['image'] }}"/> 
     </div>
     
     <div class="info-container">
     <h1>{{ user.first_name }} {{user.last_name}}</h1>
-    <h5><b>Profile Created On:</b> {{user.created_on}}</h5><br><br>
-    <p><b>Username:</b> {{user.username}}</p><br> 
-    <p><b>UserID:</b> {{user.userid}}</p><br>
-    <p><b>Gender:</b> {{user.gender}}</p><br>
+    <h5><b>Profile Created On:</b> {{user.created_on}}</h5><br>
+    <p><b>Username:</b> {{user.username}}</p>
+    <p><b>UserID:</b> {{user.userid}}</p>
+    <p><b>Gender:</b> {{user.gender}}</p>
     <p><b>Age:</b> {{user.age}}</p><br><br>
     <p id="about" class="separator">{{user['biography']}}</p>
     </div>
