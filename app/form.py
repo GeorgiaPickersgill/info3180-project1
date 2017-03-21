@@ -20,12 +20,3 @@ class ProfileForm(FlaskForm):
 	image = FileField('image',validators=[FileRequired()])
 	gender = SelectField(u'Gender', choices=[('M', 'Male'), ('F', 'Female')])
 	submit = SubmitField(" Submit profile details ")
-
-class AllProfilesForm(FlaskForm):
-	crf = True
-	
-
-
-class PersonalProfileForm(FlaskForm):
-	csrf = True
-	

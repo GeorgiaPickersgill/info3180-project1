@@ -17,7 +17,10 @@
 
           <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated %}
-            <li class="active"><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li class="active"><a href="{{ url_for('profile') }}">Create a profile</a></li>
+            <li><a href="{{ url_for('profiles') }}">View all profiles</a></li>
+            <li><a href="{{ url_for('profiles') }}">View all profiles</a></li>
           {% else %}
             <li class="active"><a href="{{ url_for('login') }}">Login</a></li>
           {% endif %}

@@ -5,52 +5,45 @@
 		<hr>
 		<h1> Complete This Form to Create your Profile</h1>
 		<hr>
-		<form action = "{{ url_for('profile') }}" method= "POST">
+		<form action = "{{ url_for('profileform') }}" method= "POST">
 			{{ form.csrf_token}}
 			<div class="name" id="name">
-			<p>First Name</p>
 			{{form.firstname.label}}
 			{{form.firstname(size=20)}}
 			<br><br>
 			</div>
 
 			<div class="name" id="name">
-			<p>Last Name</p>
 			{{form.lastname.label}}
 			{{form.lastname(size=20)}}
 			<br><br>
 			</div>
 			
 			<div class="name" id="name">
-			<p>Username</p>
 			{{form.username.label}}
 			{{form.username(size=20)}}
 			<br><br>
 			</div>
 
 			<div class="age" id="age">
-			<p>Age</p>
 			{{form.age.label}}
 			{{form.age(size=20)}}
 			<br><br>
 			</div>
 
 			<div class="biography" id="biography" >
-			<p>Biography</p>
 			{{form.biography.label}}
 			{{form.biography(size=20)}}
 			<br><br>
 			</div>
 
 			<div class="gender" id="gender">
-			<p>Gender</p>
 			{{form.gender.label}}
-			{{form.gender(size=20)}}
+			{{form.gender(size=3)}}
 			<br><br>
 			</div>
 
 			<div class="image" id="image">
-			<p>Profile Image</p>
 			{{form.image.label}}
 			{{form.image(size=20)}}
 			<br><br>

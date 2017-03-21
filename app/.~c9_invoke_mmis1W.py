@@ -66,30 +66,30 @@ def secure_page():
     
 
 @app.route('/profile', methods= ['GET','POST'])
-#@login_required
+@login_required
 def profileform ():
-    file_folder = app.config["UPLOAD_FOLDER"]
-    form = profileform()
-    if request.method == 'POST' and form.validate_on_submit() and allowed_file(image.filename):
-        """post method filler"""
-        username = request.form['username']
-        first_name = request.form['firstname']
-        last_name = request.form['lastname']
-        age = request.form['age']
-        biography = request.form['biography']
-        image = request.files['image']
-        gender = request.form['gender']
-        created_on = timeinfo()
-        userid = uuid.uuid4()
-        filename = secure_filename(image.filename)
-        filename = "{}-{}".format(userid, filename)
-        prof = UserProfile(userid,first_name,last_name,username,gender,age,biography,image,timeinfo())
-        db.session.add(prof)
-        db.session.commit()
-        image.save(os.path.join(file_folder, filename))
-        
-        flash("Your Profile has been created!! User Successfully Added!", category = 'success')
-        return redirect (url_for('home'))
+    form = ProfileForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            """post method filler"""
+            username = request.form['username']
+            first_name = request.form['firstname']
+            last_name = request.form['lastname']
+            age = request.form['age']
+            biography = request.form['biography']
+            image = request.files['image']
+            gender = request.form['gender']
+            created_on = timeinfo()
+            userid = uuid.uuid4()
+            if image and allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                filename = "{}-{}".format(userid, filename)
+                prof = UserProfile(userid,first_name,last_name,username,gender,age,biography,image,timeinfo())
+                db.session.add(prof)
+                db.session.commit()
+                image.save(os.path.join(file_folder, filename))
+                flash("Your Profile has been created!! User Successfully Added!", category = 'success')
+                return redirect ((url_for('profile'))
     return render_template('profile.html',form=form)
     
 def allowed_file(filename):
@@ -98,37 +98,39 @@ def allowed_file(filename):
 
         
 @app.route('/profiles', methods= ['GET','POST'])
-#@login_required
+@login_required
 def allprofilesform ():
     allusers=[]
     xl=[]
     pro={}
     ind=0
-    users = db.session.query(UserProfile).all()
-    for user in users:
-        pro={'username':user.username,'userid':str(user.userid)}
-        allusers.insert(ind,pro)
-        ind+=1
+    if request.method== "POST":
+        users = db.session.query(UserProfile).all()
+        for user in users:
+            pro={'username':user.username,'userid':str(user.id)}
+            allusers.insert(ind,pro)
+            ind+=1
         x={'users':jsonify(allusers)}
         xl.insert(0,x)
-    if request.headers.get('content-type') == 'application/json' or request.method == 'POST':
-        return jsonify(users = allusers)
+        return jsonify(allusers)
+    users = db.session.query(UserProfile).all()
+    for user in users:
+        allusers.append((user.first_name, user.username))
     return render_template('profiles.html',users=users)
         
 
 @app.route('/profile/<userid>', methods= ['GET','POST'])
-#@login_required
+@login_required
 def personalprofileform (userid):
     i=0
-    user= db.session.query(UserProfile).filter_by(UserProfile.userid == str(userid)).first()
-    if not user:
-        flash("Cannot Find User", category = "danger")
-    else:
-        if request.headers.get('content-type') == 'application/json' or request.method == 'POST':
+    if request.method=='POST':
+        users= db.session.query(UserProfile).filter_by(username=userid)
+        for user in users:
             p={'userid':str(user.userid),'username':user.username, 'image':user.image,'gender':user.gender,'age':str(user.age),'profile_created_on':user.created_on}
-            return jsonify(p)
-        return render_template('personalprofile.html', user = user)
-    return redirect(url_for('profiles'))
+            i+=1
+        return jsonify(p)
+    users= db.session.query(UserProfile).filter_by(username=userid)
+    return render_template('viewprof.html',users=users)
         
 def timeinfo():
 	date = time.strftime("%d %b %Y")
