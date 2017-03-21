@@ -1,16 +1,26 @@
 {% extends 'base.html'%}
+{% block css %}
+
+    <link rel="stylesheet" href="/static/css/profile.css"> 
+
+{% endblock %}
+
 {% block main%}
-    {% for user in users %}
+<div id = "info">
+    <div>
+        <img id = "pic" src = "/static/uploads/{{ user['image'] }}"/> 
+    </div>
+    
+    <div>
     <h1>{{ user.first_name }}'s Profile</h1>
-    <img src="{{user.image}}"></img>
     <h2>{{ user.first_name }} {{user.last_name}}</h2> 
     <h6>Date Created: {{user.created_on}}</h6>
-    <p>Username: {{user.username}}<br>
-    UserID: {{user.userid}}<br>
-    Gender: {{user.gender}}<br>
-    Age: {{user.age}}<br><br>
-    {{user.biography}}
-    </p> 
-    {% endfor %}
+    <p>Username: {{user.username}}</p><br> 
+    <p>UserID: {{user.userid}}</p><br>
+    <p>Gender: {{user.gender}}</p><br>
+    <p>Age: {{user.age}}</p><br><br>
+    <p>{{user['biography']}}</p>
+    </div>
+</div>
     {% endblock%}
   

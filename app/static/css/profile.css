@@ -8,3 +8,29 @@ image{
     float:left;
     padding-right:2em;
 }
+
+body 
+{
+    padding-top: 50px;
+    
+}
+
+
+#pic
+    {
+        width: 300px;
+        height:300px;
+        margin: 30px;
+        padding-left:70px;
+        float:left;
+    }
+    
+    
+#info
+    {
+        border: solid 2px #bfbfbf;
+        width:700px;
+        height: 400px;
+        margin: 30px;
+        border-radius: 10px;
+    }

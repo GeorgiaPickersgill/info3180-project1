@@ -69,9 +69,8 @@ def secure_page():
 #@login_required
 def profileform ():
     file_folder = app.config["UPLOAD_FOLDER"]
-    form = profileform()
+    form = ProfileForm() 
     if request.method == 'POST' and form.validate_on_submit() and allowed_file(image.filename):
-        """post method filler"""
         username = request.form['username']
         first_name = request.form['firstname']
         last_name = request.form['lastname']
@@ -83,14 +82,15 @@ def profileform ():
         userid = uuid.uuid4()
         filename = secure_filename(image.filename)
         filename = "{}-{}".format(userid, filename)
-        prof = UserProfile(userid,first_name,last_name,username,gender,age,biography,image,timeinfo())
-        db.session.add(prof)
+        profile = UserProfile(userid,first_name,last_name,username,gender,age,biography,image,created_on)
+        db.session.add(profile)
         db.session.commit()
         image.save(os.path.join(file_folder, filename))
-        
         flash("Your Profile has been created!! User Successfully Added!", category = 'success')
         return redirect (url_for('home'))
     return render_template('profile.html',form=form)
+    
+    
     
 def allowed_file(filename):
     return '.' in filename and \
@@ -100,35 +100,36 @@ def allowed_file(filename):
 @app.route('/profiles', methods= ['GET','POST'])
 #@login_required
 def allprofilesform ():
-    allusers=[]
-    xl=[]
-    pro={}
-    ind=0
     users = db.session.query(UserProfile).all()
-    for user in users:
-        pro={'username':user.username,'userid':str(user.userid)}
-        allusers.insert(ind,pro)
-        ind+=1
-        x={'users':jsonify(allusers)}
-        xl.insert(0,x)
-    if request.headers.get('content-type') == 'application/json' or request.method == 'POST':
+    if request.headers.get('content-type') == 'application/json' and request.method == 'POST':
+        allusers=[]
+        for user in users:
+            pro={'username':user.username,'userid':str(user.userid)}
+            allusers.append(pro)
         return jsonify(users = allusers)
-    return render_template('profiles.html',users=users)
+    else:
+        if not users:
+            flash('There are no users in the App')
+            return redirect(url_for('profileform'))
+        return render_template('profiles.html', users=users)
         
 
 @app.route('/profile/<userid>', methods= ['GET','POST'])
 #@login_required
 def personalprofileform (userid):
-    i=0
     user= db.session.query(UserProfile).filter_by(UserProfile.userid == str(userid)).first()
-    if not user:
-        flash("Cannot Find User", category = "danger")
+    if request.headers.get('content-type') == 'application/json' and request.method == 'POST':
+        if user:
+            return jsonify({'userid': str(user.userid),'username':user.username, 'image':user.image,'gender':user.gender,'age':str(user.age),'profile_created_on':user.created_on})
+        else:
+            return jsonify(user)
     else:
-        if request.headers.get('content-type') == 'application/json' or request.method == 'POST':
-            p={'userid':str(user.userid),'username':user.username, 'image':user.image,'gender':user.gender,'age':str(user.age),'profile_created_on':user.created_on}
-            return jsonify(p)
-        return render_template('personalprofile.html', user = user)
-    return redirect(url_for('profiles'))
+        if not user:
+            flash('User does not exist.','danger')
+            return redirect(url_for('allprofilesform'))
+        else:
+            return render_template('personalprofile.html', user = user)
+    
         
 def timeinfo():
 	date = time.strftime("%d %b %Y")

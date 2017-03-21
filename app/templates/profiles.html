@@ -1,9 +1,12 @@
 {% extends "base.html"%}
 {% block main%}
+
+<div class="container">
+    {% include 'flash_messages.html' %}
 <h1>ALL USERS</h1>
 <ul>
     {% for user in users %}
-    <li><a href="/profile/{{user.username}}"> {{ user.first_name }} {{user.last_name}}</a></li>
+    <li><a href="{{ url_for('userProfile', userid=user['userid']) }}">{{ user['userid'] }} {{ user['first_name'] }} {{user['lastname']}}</a></li>
     {% endfor %}
   </ul>
 </div>
