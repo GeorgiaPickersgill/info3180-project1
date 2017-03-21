@@ -16,21 +16,33 @@ body
 }
 
 
-#pic
+.main-container #pic
     {
-        width: 300px;
-        height:300px;
-        margin: 30px;
-        padding-left:70px;
+        width: 50%;
+        height:100%;
+        margin: 10px;
+        padding-left:10px;
         float:left;
+        position: relative;
+        left: 0;
     }
     
     
-#info
+.main-container .info-container
     {
-        border: solid 2px #bfbfbf;
-        width:700px;
+        
+        width:200px;
         height: 400px;
-        margin: 30px;
-        border-radius: 10px;
+        float:right;
+        position: relative;
+        right: 0;
+        margin: auto;
     }
+    
+.main-container{
+    border: solid 2px #bfbfbf;
+    background-color: grey;
+    position: absolute;
+    width: 600px;
+    height: 400px;
+}

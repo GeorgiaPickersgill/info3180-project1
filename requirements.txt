@@ -9,5 +9,6 @@ wsgiref==0.1.2
 Flask-WTF
 Flask-SQLAlchemy
 Flask-Migrate
+Flask-Uploads
 Flask-Login
 psycopg2

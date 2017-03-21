@@ -10,7 +10,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from form import LoginForm, ProfileForm
 from models import UserProfile
 from flask import render_template, request, redirect, url_for, flash, jsonify, make_response
-import os, time,json
+import os, time, json, random
 from werkzeug.utils import secure_filename
 import uuid
 
@@ -68,33 +68,35 @@ def secure_page():
 @app.route('/profile', methods= ['GET','POST'])
 #@login_required
 def profileform ():
-    file_folder = app.config["UPLOAD_FOLDER"]
     form = ProfileForm() 
-    if request.method == 'POST' and form.validate_on_submit() and allowed_file(image.filename):
+    if request.method == 'POST' and form.validate_on_submit():
         username = request.form['username']
         first_name = request.form['firstname']
         last_name = request.form['lastname']
         age = request.form['age']
         biography = request.form['biography']
+        
+        file_folder = app.config["UPLOAD_FOLDER"]
         image = request.files['image']
+        imageName = secure_filename(image.filename)
+        image.save(os.path.join(file_folder, imageName))
+        
+        while True:
+            userid = random.randint(6000000,6999999) #Generates a random id for the user
+            userid_data = UserProfile.query.filter_by(userid=userid).first()
+            if userid_data is None:
+                #Genereated userid is unique
+                break
         gender = request.form['gender']
         created_on = timeinfo()
-        userid = uuid.uuid4()
-        filename = secure_filename(image.filename)
-        filename = "{}-{}".format(userid, filename)
-        profile = UserProfile(userid,first_name,last_name,username,gender,age,biography,image,created_on)
+        profile = UserProfile(userid,first_name,last_name,username,age,biography,imageName,gender,created_on)
         db.session.add(profile)
         db.session.commit()
-        image.save(os.path.join(file_folder, filename))
         flash("Your Profile has been created!! User Successfully Added!", category = 'success')
-        return redirect (url_for('home'))
+        return redirect (url_for('allprofilesform'))
     return render_template('profile.html',form=form)
     
-    
-    
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
 
         
 @app.route('/profiles', methods= ['GET','POST'])
@@ -109,7 +111,7 @@ def allprofilesform ():
         return jsonify(users = allusers)
     else:
         if not users:
-            flash('There are no users in the App')
+            flash('There are no users in the Application Database')
             return redirect(url_for('profileform'))
         return render_template('profiles.html', users=users)
         
@@ -117,7 +119,7 @@ def allprofilesform ():
 @app.route('/profile/<userid>', methods= ['GET','POST'])
 #@login_required
 def personalprofileform (userid):
-    user= db.session.query(UserProfile).filter_by(UserProfile.userid == str(userid)).first()
+    user= db.session.query(UserProfile).filter_by(userid=userid).first()
     if request.headers.get('content-type') == 'application/json' and request.method == 'POST':
         if user:
             return jsonify({'userid': str(user.userid),'username':user.username, 'image':user.image,'gender':user.gender,'age':str(user.age),'profile_created_on':user.created_on})

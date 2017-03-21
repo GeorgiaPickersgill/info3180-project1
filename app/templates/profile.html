@@ -6,7 +6,7 @@
 <hr>
 {% include 'flash_messages.html' %}
 <div>
-	<form action = "{{ url_for('profileform') }}" method= "POST">
+	<form action = "{{ url_for('profileform') }}" method= "POST" enctype="multipart/form-data">
 		{{ form.csrf_token}}
 		
 		<div class="name" id="name">

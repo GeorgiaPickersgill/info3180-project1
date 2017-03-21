@@ -4,9 +4,13 @@
 <div class="container">
     {% include 'flash_messages.html' %}
 <h1>ALL USERS</h1>
-<ul>
+<ul class="list-group">
     {% for user in users %}
-    <li><a href="{{ url_for('userProfile', userid=user['userid']) }}">{{ user['userid'] }} {{ user['first_name'] }} {{user['lastname']}}</a></li>
+    <li>
+        <span><img src="{{ url_for('static',filename='uploads/'+ user.image) }}" alt="{{ user.image }}" class="img-thumbnail" height="150" width="75"/></span>
+        <a href="/profile/{{ user.userid }}">{{ user.userid }} </a>
+        <span class="badge badge-default badge-pill"> {{ user.first_name }} {{user.lastname}}</span>
+    </li>
     {% endfor %}
   </ul>
 </div>

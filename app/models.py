@@ -24,20 +24,12 @@ class UserProfile(db.Model):
         self.gender = gender
         self.created_on = created_on
         
-    def is_authenticated(self):
-        return True
 
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
+    def get_userid(self):
         try:
-            return unicode(self.id)  # python 2 support
+            return unicode(self.userid)  # python 2 support
         except NameError:
-            return str(self.id)  # python 3 support
+            return str(self.userid)  # python 3 support
 
     def __repr__(self):
         return '<User %r>' % (self.username)
